@@ -1,0 +1,2594 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚔️ BATTLE OF BRAINS PRO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+            transition: background 0.3s ease;
+            background: #f0f2f5;
+        }
+
+        body.light-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #0c0c14 0%, #1a1a2e 50%, #0f172a 100%);
+        }
+
+        /* PARTIKEL BACKGROUND */
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+
+        /* TOGGLE THEME */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* SPLASH SCREEN */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease;
+            padding: 20px;
+        }
+
+        .splash-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .splash-content {
+            text-align: center;
+            animation: bounceIn 0.8s ease;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 30px;
+            border-radius: 25px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            border: 5px solid #667eea;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .splash-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            animation: shine 3s infinite linear;
+            z-index: 0;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .splash-logo {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+            color: #667eea;
+            text-shadow: 0 5px 15px rgba(102, 126, 234, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .splash-title {
+            color: #333;
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        .splash-subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .splash-features {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 10px;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .feature-text {
+            font-size: 11px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .splash-btn {
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            margin: 15px 0;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .splash-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, #764ba2, #667eea);
+        }
+
+        .splash-social {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+        }
+
+        .splash-social a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            background: rgba(102, 126, 234, 0.1);
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .splash-social a:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            border-bottom: 3px solid #667eea;
+            display: none;
+        }
+
+        body.dark-mode .navbar {
+            background: rgba(26, 26, 46, 0.95);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 900;
+            color: #667eea;
+        }
+
+        body.dark-mode .nav-brand {
+            color: white;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-item {
+            color: #333;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        body.dark-mode .nav-item {
+            color: #e0e0e0;
+        }
+
+        .nav-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        body.dark-mode .nav-item:hover {
+            background: rgba(102, 126, 234, 0.2);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        /* HOME SCREEN */
+        .home-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 80px;
+            display: none;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            border: 3px solid rgba(102, 126, 234, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        body.dark-mode .hero-section {
+            background: rgba(26, 26, 46, 0.9);
+        }
+
+        .hero-title {
+            font-size: 42px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        body.dark-mode .hero-subtitle {
+            color: #ccc;
+        }
+
+        /* ACTION BUTTONS */
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .action-btn {
+            padding: 15px 35px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            min-width: 180px;
+            justify-content: center;
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .action-btn.secondary {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        /* FEATURES GRID */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.dark-mode .feature-card {
+            background: #1a1a2e;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .feature-card-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .feature-card-title {
+            font-size: 20px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        body.dark-mode .feature-card-title {
+            color: white;
+        }
+
+        .feature-card-desc {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        body.dark-mode .feature-card-desc {
+            color: #ccc;
+        }
+
+        /* FOOTER */
+        .footer {
+            margin-top: 50px;
+            padding: 30px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+
+        body.dark-mode .footer {
+            color: #ccc;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* PLAYER NAME SCREEN */
+        .player-name-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9998;
+            transition: opacity 0.6s ease;
+            padding: 20px;
+        }
+
+        .player-name-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .player-name-content {
+            text-align: center;
+            animation: slideUp 0.8s ease;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 35px;
+            border-radius: 20px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            width: 90%;
+            border: 4px solid #667eea;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .player-name-title {
+            color: #667eea;
+            font-size: 26px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .player-name-input {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            background: white;
+            color: #333;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-family: inherit;
+        }
+
+        .player-name-input:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .player-name-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .player-name-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, #764ba2, #667eea);
+        }
+
+        /* GAME CONTAINER */
+        .game-container {
+            width: 100%;
+            max-width: 700px;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 35px 90px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            animation: slideIn 0.6s ease;
+            border: 4px solid rgba(102, 126, 234, 0.2);
+            display: none;
+        }
+
+        body.dark-mode .game-container {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* HEADER GAME */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 13px;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        /* CONTENT AREA */
+        .content {
+            padding: 25px;
+        }
+
+        /* CARD STYLES */
+        .card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(102, 126, 234, 0.15);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .card {
+            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+            color: white;
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .card-title {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+        }
+
+        body.dark-mode .card-title {
+            color: #e0e0e0;
+        }
+
+        /* FORM ELEMENTS */
+        select, button {
+            width: 100%;
+            padding: 14px;
+            margin: 8px 0;
+            border-radius: 12px;
+            border: 2px solid #ddd;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        body.dark-mode select,
+        body.dark-mode button {
+            background: #16213e;
+            color: white;
+            border-color: #533483;
+        }
+
+        select {
+            background: white;
+            cursor: pointer;
+            color: #333;
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23667eea" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+            padding-right: 45px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* STATS BAR */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            color: white;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.9;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 900;
+            margin-top: 5px;
+        }
+
+        /* PROGRESS BAR */
+        .progress-bar {
+            width: 100%;
+            height: 14px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .progress-bar {
+            background: #2d3748;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.4s ease;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* LEVEL SELECTOR */
+        .level-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 15px 0;
+        }
+
+        .level-btn {
+            padding: 15px 10px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            color: #333;
+        }
+
+        body.dark-mode .level-btn {
+            background: #1a1a2e;
+            color: white;
+            border-color: #533483;
+        }
+
+        .level-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .level-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            transform: scale(1.03);
+        }
+
+        /* QUESTION TEXT */
+        #questionText {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333;
+            margin: 15px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            border-left: 6px solid #667eea;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        body.dark-mode #questionText {
+            background: linear-gradient(135deg, #16213e, #0f3460);
+            color: #e0e0e0;
+            border-left-color: #764ba2;
+        }
+
+        /* ANSWER BUTTONS */
+        .answer-btn {
+            text-align: left;
+            padding: 15px 15px 15px 60px;
+            margin: 10px 0;
+            background: white;
+            border: 2px solid #ddd;
+            color: #333;
+            border-radius: 12px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        body.dark-mode .answer-btn {
+            background: #16213e;
+            color: #e0e0e0;
+            border-color: #533483;
+        }
+
+        .answer-btn:hover:not(.correct):not(.wrong) {
+            background: #f8f9fa;
+            border-color: #667eea;
+            transform: translateX(10px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.15);
+        }
+
+        .answer-btn::before {
+            content: attr(data-number);
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .answer-btn.correct {
+            background: linear-gradient(135deg, #84fab0, #8fd3f4);
+            color: #2d5016;
+            border-color: #84fab0;
+            animation: correctPulse 0.6s ease;
+        }
+
+        .answer-btn.wrong {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+            color: #6b2c2c;
+            border-color: #fa709a;
+            animation: wrongShake 0.6s ease;
+        }
+
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* POWERUPS */
+        .powerups-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 15px 0;
+        }
+
+        .powerup-btn {
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            margin: 0 !important;
+        }
+
+        .powerup-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .powerup-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* DISPLAY ELEMENTS */
+        .combo-display {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            background: linear-gradient(135deg, #ffd89b, #19547b);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 15px;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+            animation: slideInRight 0.3s ease;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .timer-display {
+            position: fixed;
+            top: 90px;
+            left: 20px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 15px;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* UTILITY CLASSES */
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* LEADERBOARD */
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-left: 6px solid #667eea;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            font-size: 14px;
+        }
+
+        body.dark-mode .leaderboard-item {
+            background: #16213e;
+            color: white;
+        }
+
+        .leaderboard-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .leaderboard-rank {
+            font-weight: 900;
+            color: #667eea;
+            min-width: 45px;
+            font-size: 18px;
+        }
+
+        .leaderboard-name {
+            flex: 1;
+            font-weight: 700;
+            margin: 0 15px;
+            font-size: 16px;
+        }
+
+        .leaderboard-score {
+            font-weight: 900;
+            color: #764ba2;
+            font-size: 18px;
+        }
+
+        /* RESULT BADGES */
+        .result-badge {
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 900;
+            margin: 15px 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0); opacity: 1; }
+        }
+
+        .result-badge.excellent {
+            background: linear-gradient(135deg, #84fab0, #8fd3f4);
+            color: #2d5016;
+        }
+
+        .result-badge.good {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .result-badge.fair {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+            color: #6b2c2c;
+        }
+
+        .result-badge.poor {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            color: white;
+        }
+
+        /* ACHIEVEMENT BADGES */
+        .achievement-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #ffd89b, #19547b);
+            border-radius: 12px;
+            font-weight: 700;
+            color: white;
+            margin: 8px 5px;
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+            animation: slideInRight 0.5s ease;
+            font-size: 13px;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            .splash-title {
+                font-size: 28px;
+            }
+            
+            .splash-subtitle {
+                font-size: 13px;
+            }
+            
+            .splash-btn {
+                padding: 12px 30px;
+                font-size: 15px;
+            }
+            
+            .splash-features {
+                gap: 10px;
+            }
+            
+            .feature {
+                min-width: 80px;
+            }
+            
+            .hero-title {
+                font-size: 32px;
+            }
+            
+            .hero-subtitle {
+                font-size: 16px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-btn {
+                min-width: 150px;
+                padding: 12px 25px;
+            }
+            
+            .navbar {
+                padding: 12px 20px;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .nav-menu {
+                gap: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-item {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+            
+            .game-container {
+                margin-top: 80px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .stats-bar {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .level-selector {
+                grid-template-columns: 1fr;
+            }
+            
+            .powerups-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .answer-btn {
+                padding: 12px 12px 12px 50px;
+            }
+            
+            .combo-display,
+            .timer-display {
+                top: 70px;
+                padding: 10px 15px;
+                font-size: 13px;
+            }
+            
+            .theme-toggle {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+                top: 15px;
+                right: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .splash-content {
+                padding: 30px 20px;
+            }
+            
+            .splash-title {
+                font-size: 24px;
+            }
+            
+            .hero-title {
+                font-size: 26px;
+            }
+            
+            .hero-section {
+                padding: 25px 20px;
+            }
+            
+            .feature-card {
+                padding: 20px;
+            }
+            
+            .player-name-content {
+                padding: 30px 20px;
+            }
+            
+            .player-name-title {
+                font-size: 22px;
+            }
+            
+            .stat-value {
+                font-size: 20px;
+            }
+            
+            #questionText {
+                padding: 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <button class="theme-toggle" id="themeToggle">🌙</button>
+
+    <div id="particles"></div>
+    <div id="comboDisplay" class="combo-display hidden">🔥 Combo: <span id="comboCount">0</span></div>
+    <div id="timerDisplay" class="timer-display hidden">⏱️ <span id="timerValue">60</span>s</div>
+
+    <!-- Splash Screen -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-content">
+            <div class="splash-logo">⚔️</div>
+            <div class="splash-title">BATTLE OF BRAINS PRO</div>
+            <div class="splash-subtitle">EDISI PREMIUM 2026 - Kelompok 5</div>
+            
+            <div class="splash-features">
+                <div class="feature">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-text">Game Edukasi</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🏆</div>
+                    <div class="feature-text">Leaderboard</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-text">Multi Mode</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-text">Analisis AI</div>
+                </div>
+            </div>
+            
+            <button class="splash-btn" id="enterGameBtn">
+                <span>🚀</span>
+                <span>MULAI PETUALANGAN</span>
+            </button>
+            
+            <div class="splash-social">
+                <a href="https://www.instagram.com/vedanova.biravarta?igsh=ZjcxY3UycnhpeTdm" target="_blank">
+                    <span>📱</span>
+                    <span>@vedanova.biravarta</span>
+                </a>
+                <a href="#" onclick="showAbout()">
+                    <span>ℹ️</span>
+                    <span>Tentang Game</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="mainNav">
+        <div class="nav-brand">
+            <span>⚔️</span>
+            <span>BATTLE OF BRAINS PRO</span>
+        </div>
+        <div class="nav-menu">
+            <a href="#" class="nav-item active" data-section="home">
+                <span>🏠</span>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-item" data-section="play">
+                <span>🎮</span>
+                <span>Main Game</span>
+            </a>
+            <a href="#" class="nav-item" data-section="leaderboard">
+                <span>🏆</span>
+                <span>Leaderboard</span>
+            </a>
+            <a href="#" class="nav-item" data-section="about">
+                <span>ℹ️</span>
+                <span>Tentang</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Home Screen -->
+    <div class="home-screen" id="homeScreen">
+        <div class="hero-section">
+            <h1 class="hero-title">SELAMAT DATANG DI BATTLE OF BRAINS PRO</h1>
+            <p class="hero-subtitle">Uji pengetahuanmu dengan 200+ soal dari 5 mata pelajaran berbeda. Tantang diri sendiri dan raih posisi tertinggi di leaderboard!</p>
+            
+            <div class="action-buttons">
+                <button class="action-btn primary" id="quickPlayBtn">
+                    <span>🎮</span>
+                    <span>MAIN CEPAT</span>
+                </button>
+                <button class="action-btn secondary" id="customGameBtn">
+                    <span>⚙️</span>
+                    <span>KUSTOM GAME</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-card-icon">🔬</div>
+                <h3 class="feature-card-title">5 MATA PELAJARAN</h3>
+                <p class="feature-card-desc">IPA, IPS, Matematika, Bahasa Inggris, dan PAI dengan total 200+ soal berkualitas tinggi.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-card-icon">⚡</div>
+                <h3 class="feature-card-title">4 LEVEL KESULITAN</h3>
+                <p class="feature-card-desc">Dari Mudah sampai Extreme dengan sistem scoring yang berbeda dan menantang.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-card-icon">🏆</div>
+                <h3 class="feature-card-title">LEADERBOARD REAL-TIME</h3>
+                <p class="feature-card-desc">Bandingkan skormu dengan pemain lain dan rebut posisi teratas.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-card-icon">🧠</div>
+                <h3 class="feature-card-title">AI NEURAL COACH</h3>
+                <p class="feature-card-desc">Analisis pola belajarmu dan dapatkan rekomendasi personal dari sistem AI.</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2026 BATTLE OF BRAINS PRO - Kelompok 5</p>
+            <p>Game Edukasi Interaktif untuk Semua Kalangan</p>
+        </div>
+    </div>
+
+    <!-- Player Name Screen -->
+    <div class="player-name-screen hidden" id="playerNameScreen">
+        <div class="player-name-content">
+            <div class="player-name-title">⚔️ Siapa Nama Kamu?</div>
+            <input type="text" class="player-name-input" id="playerNameInput" placeholder="Masukkan nama panggilan..." maxlength="30">
+            <button class="player-name-btn" id="playerNameBtn">
+                <span>🎮</span>
+                <span>LANJUTKAN PETUALANGAN</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div class="game-container" id="gameContainer">
+        <div class="header">
+            <h1>⚔️ BATTLE OF BRAINS PRO</h1>
+            <p>Kelompok 5 | Edisi Premium 2026</p>
+        </div>
+
+        <!-- Start Screen -->
+        <div id="startScreen" class="content hidden">
+            <div class="card fade-in">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div><strong>👤 <span id="displayPlayerName">Pemain</span></strong></div>
+                    <button id="changeNameBtn" style="width: auto; padding: 8px 16px; font-size: 12px; margin: 0;">Ganti Nama</button>
+                </div>
+            </div>
+
+            <div class="card fade-in">
+                <div class="card-title">📚 Pilih Mata Pelajaran</div>
+                <select id="subjectSelect">
+                    <option value="ipa">🔬 IPA (Sains & Biologi)</option>
+                    <option value="ips">🌍 IPS (Geografi & Sejarah)</option>
+                    <option value="mtk">🧮 Matematika (Logika & Hitungan)</option>
+                    <option value="bing">🇬🇧 Bahasa Inggris (Kosakata)</option>
+                    <option value="pai">🕌 PAI (Pendidikan Agama Islam)</option>
+                </select>
+                
+                <div class="card-title">⚡ Mode Permainan</div>
+                <select id="modeSelect">
+                    <option value="normal">📖 Mode Normal</option>
+                    <option value="timed">⏱️ Time Challenge (60 detik)</option>
+                    <option value="survival">💪 Survival Mode (3 nyawa)</option>
+                </select>
+                
+                <div class="card-title">📈 Level Kesulitan</div>
+                <div class="level-selector">
+                    <div class="level-btn active" data-level="easy">😊 Mudah</div>
+                    <div class="level-btn" data-level="medium">😐 Sedang</div>
+                    <div class="level-btn" data-level="hard">😰 Sulit</div>
+                    <div class="level-btn" data-level="extreme">😱 Extreme</div>
+                </div>
+                
+                <button id="startBtn">🎮 MULAI PERMAINAN</button>
+            </div>
+
+            <div class="card fade-in">
+                <div class="card-title">🏆 Peringkat Teratas</div>
+                <div id="leaderboardContainer"></div>
+            </div>
+
+            <div class="card fade-in">
+                <div class="card-title">📊 Statistik Anda</div>
+                <div class="stats-bar">
+                    <div class="stat-item">
+                        <div class="stat-label">Total Main</div>
+                        <div class="stat-value" id="totalGames">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Rata-rata</div>
+                        <div class="stat-value" id="avgScore">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Terbaik</div>
+                        <div class="stat-value" id="bestScore">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="content hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <strong>👤 <span id="gamePlayerName">Pemain</span></strong>
+                <span style="font-size: 14px; font-weight: 700; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Soal: <span id="questionCount">0</span>/40</span>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-label">Skor</div>
+                    <div class="stat-value" id="scoreValue">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Nyawa</div>
+                    <div class="lives" id="livesContainer" style="font-size: 18px; display: flex; gap: 5px;"></div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Streak</div>
+                    <div class="stat-value" id="streakValue">0</div>
+                </div>
+            </div>
+            
+            <div class="card fade-in">
+                <div class="card-title">❓ Soal #<span id="currentQuestionNumber">1</span></div>
+                <div id="questionText">Memuat pertanyaan...</div>
+                <div id="answersContainer"></div>
+                <div class="powerups-container" id="powerupsContainer"></div>
+            </div>
+            
+            <div style="display: flex; gap: 12px; margin-top: 20px;">
+                <button id="nextBtn" class="hidden" style="flex: 1.5;">⏭️ Lanjut</button>
+                <button id="quitBtn" style="flex: 1; background: linear-gradient(135deg, #999, #666);">🏠 Keluar</button>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameOverScreen" class="content hidden">
+            <div class="card" style="text-align: center;">
+                <div class="card-title" style="justify-content: center;">🏆 HASIL PERMAINAN</div>
+                
+                <div style="font-size: 16px; font-weight: 700; color: #667eea; margin-bottom: 15px;">
+                    👤 <span id="finalPlayerName">Pemain</span>
+                </div>
+                
+                <div id="finalScore" style="font-size: 52px; font-weight: 900; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 20px 0;">0</div>
+                
+                <div id="resultMessage" style="font-size: 18px; color: #333; margin-bottom: 15px; font-weight: 700;"></div>
+                <div id="resultBadge"></div>
+                <div id="achievementContainer" style="margin: 15px 0;"></div>
+                
+                <div class="stats-bar" style="margin: 20px 0;">
+                    <div class="stat-item">
+                        <div class="stat-label">Benar</div>
+                        <div class="stat-value" id="correctCount">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Salah</div>
+                        <div class="stat-value" id="wrongCount">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Akurasi</div>
+                        <div class="stat-value" id="accuracyPercent">0%</div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 12px; flex-direction: column;">
+                    <button id="exportBtn" style="background: linear-gradient(135deg, #84fab0, #8fd3f4); box-shadow: 0 8px 25px rgba(132, 250, 176, 0.3);">📥 Download Hasil</button>
+                    <button id="restartBtn">🔄 Main Lagi</button>
+                    <button id="menuBtn" style="background: linear-gradient(135deg, #999, #666);">🏠 Kembali ke Menu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== THEME MANAGEMENT ====================
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            body.classList.toggle('dark-mode');
+            themeToggle.textContent = body.classList.contains('dark-mode') ? '☀️' : '🌙';
+            localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            body.classList.remove('light-mode');
+            body.classList.add('dark-mode');
+            themeToggle.textContent = '☀️';
+        } else {
+            themeToggle.textContent = '🌙';
+        }
+
+        // ==================== PARTICLE EFFECT ====================
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 15) + 's';
+                particle.style.width = particle.style.height = (3 + Math.random() * 5) + 'px';
+                container.appendChild(particle);
+            }
+        }
+
+        // ==================== SCREEN MANAGEMENT ====================
+        const splashScreen = document.getElementById('splashScreen');
+        const enterGameBtn = document.getElementById('enterGameBtn');
+        const mainNav = document.getElementById('mainNav');
+        const homeScreen = document.getElementById('homeScreen');
+        const gameContainer = document.getElementById('gameContainer');
+        const playerNameScreen = document.getElementById('playerNameScreen');
+        const playerNameInput = document.getElementById('playerNameInput');
+        const playerNameBtn = document.getElementById('playerNameBtn');
+
+        // Auto hide splash screen after 3 seconds
+        setTimeout(() => {
+            if (!splashScreen.classList.contains('hidden')) {
+                splashScreen.classList.add('hidden');
+                mainNav.style.display = 'flex';
+                homeScreen.style.display = 'flex';
+                
+                setTimeout(() => {
+                    homeScreen.style.opacity = '1';
+                    homeScreen.style.transform = 'translateY(0)';
+                }, 100);
+            }
+        }, 3000);
+
+        // Enter game from splash screen
+        enterGameBtn.addEventListener('click', () => {
+            splashScreen.classList.add('hidden');
+            mainNav.style.display = 'flex';
+            homeScreen.style.display = 'flex';
+            
+            setTimeout(() => {
+                homeScreen.style.opacity = '1';
+                homeScreen.style.transform = 'translateY(0)';
+            }, 100);
+        });
+
+        // Quick play button
+        document.getElementById('quickPlayBtn').addEventListener('click', () => {
+            homeScreen.style.display = 'none';
+            playerNameScreen.classList.remove('hidden');
+            playerNameInput.focus();
+        });
+
+        // Custom game button
+        document.getElementById('customGameBtn').addEventListener('click', () => {
+            homeScreen.style.display = 'none';
+            playerNameScreen.classList.remove('hidden');
+            playerNameInput.focus();
+        });
+
+        // Player name submission
+        playerNameBtn.addEventListener('click', () => {
+            const name = playerNameInput.value.trim();
+            if (name.length > 0) {
+                savePlayerName(name);
+                playerNameScreen.classList.add('hidden');
+                showGameSelection();
+            } else {
+                alert('Masukkan nama terlebih dahulu!');
+            }
+        });
+
+        playerNameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') playerNameBtn.click();
+        });
+
+        // ==================== NAVIGATION ====================
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = item.dataset.section;
+                
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                
+                navigateToSection(section);
+            });
+        });
+
+        function navigateToSection(section) {
+            homeScreen.style.display = 'none';
+            gameContainer.style.display = 'none';
+            
+            switch(section) {
+                case 'home':
+                    homeScreen.style.display = 'flex';
+                    break;
+                case 'play':
+                    showGameSelection();
+                    break;
+                case 'leaderboard':
+                    showLeaderboardSection();
+                    break;
+                case 'about':
+                    showAbout();
+                    break;
+            }
+        }
+
+        function showGameSelection() {
+            gameContainer.style.display = 'block';
+            mainNav.style.display = 'none';
+            
+            document.getElementById('startScreen').classList.remove('hidden');
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            
+            updateStatsDisplay();
+            updateLeaderboardDisplay();
+        }
+
+        function showLeaderboardSection() {
+            alert('Leaderboard akan ditampilkan di sini!');
+            // Untuk implementasi lengkap, Anda bisa menambahkan halaman leaderboard terpisah
+        }
+
+        function showAbout() {
+            const aboutHTML = `
+                <div style="background: white; border-radius: 20px; padding: 40px; max-width: 600px; margin: 20px auto; box-shadow: 0 25px 70px rgba(0,0,0,0.2);">
+                    <h2 style="color: #667eea; margin-bottom: 25px; text-align: center; font-size: 28px;">TENTANG BATTLE OF BRAINS PRO</h2>
+                    <div style="line-height: 1.6; color: #555; font-size: 16px;">
+                        <p><strong>🎮 Deskripsi Game:</strong></p>
+                        <p>Battle of Brains Pro adalah game edukasi interaktif yang dirancang untuk menguji pengetahuan pemain dalam berbagai mata pelajaran. Dengan antarmuka yang menarik dan fitur-fitur modern, game ini cocok untuk semua usia.</p>
+                        
+                        <p><strong>👥 Pengembang:</strong></p>
+                        <p>Game ini dikembangkan oleh Kelompok 5 sebagai proyek edukasi tahun 2026.</p>
+                        
+                        <p><strong>📚 Fitur Utama:</strong></p>
+                        <ul style="margin-left: 25px; margin-bottom: 20px;">
+                            <li>5 mata pelajaran berbeda dengan 200+ soal</li>
+                            <li>4 level kesulitan yang menantang</li>
+                            <li>Sistem leaderboard untuk persaingan sehat</li>
+                            <li>Analisis AI Neural Coach</li>
+                            <li>Mode permainan variatif (Normal, Time Challenge, Survival)</li>
+                            <li>Powerups untuk membantu permainan</li>
+                            <li>Statistik dan achievement sistem</li>
+                        </ul>
+                        
+                        <p><strong>🎯 Tujuan:</strong></p>
+                        <p>Meningkatkan pengetahuan sambil bersenang-senang melalui tantangan edukasi yang menarik dan interaktif.</p>
+                    </div>
+                </div>
+            `;
+            
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+                padding: 20px;
+                backdrop-filter: blur(5px);
+            `;
+            modal.innerHTML = aboutHTML;
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    document.body.removeChild(modal);
+                }
+            });
+            
+            document.body.appendChild(modal);
+        }
+
+        // ==================== STORAGE MANAGEMENT ====================
+        const STORAGE_KEY = 'battleOfBrains_stats';
+        const LEADERBOARD_KEY = 'battleOfBrains_leaderboard';
+        const PLAYER_NAME_KEY = 'battleOfBrains_playerName';
+
+        let currentPlayerName = localStorage.getItem(PLAYER_NAME_KEY) || '';
+
+        function savePlayerName(name) {
+            currentPlayerName = name;
+            localStorage.setItem(PLAYER_NAME_KEY, name);
+            document.getElementById('displayPlayerName').textContent = name;
+            document.getElementById('gamePlayerName').textContent = name;
+            document.getElementById('finalPlayerName').textContent = name;
+        }
+
+        function saveGameStats(score, accuracy, subject, level) {
+            let stats = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+                totalGames: 0,
+                totalScore: 0,
+                bestScore: 0,
+                games: []
+            };
+
+            stats.totalGames++;
+            stats.totalScore += score;
+            if (score > stats.bestScore) {
+                stats.bestScore = score;
+            }
+
+            stats.games.push({
+                playerName: currentPlayerName,
+                score: score,
+                accuracy: accuracy,
+                subject: subject,
+                level: level,
+                date: new Date().toISOString()
+            });
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
+            updateLeaderboard(score, currentPlayerName);
+            updateStatsDisplay();
+        }
+
+        function getGameStats() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+                totalGames: 0,
+                totalScore: 0,
+                bestScore: 0,
+                games: []
+            };
+        }
+
+        function updateLeaderboard(newScore, playerName) {
+            let leaderboard = JSON.parse(localStorage.getItem(LEADERBOARD_KEY)) || [];
+            leaderboard.push({ score: newScore, name: playerName });
+            leaderboard.sort((a, b) => b.score - a.score);
+            leaderboard = leaderboard.slice(0, 10);
+            localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(leaderboard));
+        }
+
+        function getLeaderboard() {
+            return JSON.parse(localStorage.getItem(LEADERBOARD_KEY)) || [];
+        }
+
+        function updateStatsDisplay() {
+            const stats = getGameStats();
+            document.getElementById('totalGames').textContent = stats.totalGames;
+            document.getElementById('bestScore').textContent = stats.bestScore;
+            const avgScore = stats.totalGames > 0 ? Math.round(stats.totalScore / stats.totalGames) : 0;
+            document.getElementById('avgScore').textContent = avgScore;
+        }
+
+        function updateLeaderboardDisplay() {
+            const leaderboard = getLeaderboard();
+            const container = document.getElementById('leaderboardContainer');
+            container.innerHTML = '';
+            
+            if (leaderboard.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666; font-weight: 600; font-size: 14px; padding: 20px;">Belum ada skor. Jadilah yang pertama!</p>';
+                return;
+            }
+
+            leaderboard.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'leaderboard-item';
+                itemDiv.innerHTML = `
+                    <div class="leaderboard-rank">#${index + 1}</div>
+                    <div class="leaderboard-name">${item.name || 'Anonim'}</div>
+                    <div class="leaderboard-score">${item.score}</div>
+                `;
+                container.appendChild(itemDiv);
+            });
+        }
+
+        // ==================== EXPORT FUNCTION ====================
+        function exportGameResults(gameState, finalScore, accuracy) {
+            const timestamp = new Date().toLocaleString('id-ID');
+            const subjectMap = {
+                'ipa': 'IPA (Sains)',
+                'ips': 'IPS (Sosial)',
+                'mtk': 'Matematika',
+                'bing': 'Bahasa Inggris',
+                'pai': 'PAI (Agama Islam)'
+            };
+            
+            const levelMap = {
+                'easy': 'Mudah',
+                'medium': 'Sedang',
+                'hard': 'Sulit',
+                'extreme': 'Extreme'
+            };
+            
+            const subject = subjectMap[gameState.subject] || gameState.subject;
+            const level = levelMap[gameState.level] || gameState.level;
+            
+            const csvContent = `
+⚔️ BATTLE OF BRAINS PRO - LAPORAN HASIL PERMAINAN
+═══════════════════════════════════════════════════════
+👤 PEMAIN: ${currentPlayerName}
+📅 TANGGAL: ${timestamp}
+📚 MATA PELAJARAN: ${subject}
+📈 LEVEL: ${level}
+🎮 MODE: ${gameState.mode === 'timed' ? 'Time Challenge' : gameState.mode === 'survival' ? 'Survival' : 'Normal'}
+
+📊 HASIL PERMAINAN:
+────────────────────────────────
+🏆 SKOR AKHIR: ${finalScore}
+✅ JAWABAN BENAR: ${gameState.correctAnswers}/40
+❌ JAWABAN SALAH: ${gameState.wrongAnswers}/40
+🎯 AKURASI: ${accuracy}%
+🔥 STREAK TERTINGGI: ${gameState.maxStreak}
+
+📈 STATISTIK TAMBAHAN:
+────────────────────────────────
+💪 NYAWA TERSISA: ${gameState.lives}
+⚡ COMBO TERTINGGI: ${gameState.combo}
+💡 PETUNJUK DIGUNAKAN: ${gameState.hintsUsed}
+🎲 50/50 DIGUNAKAN: ${gameState.fiftyFiftyUsed ? 'Ya' : 'Tidak'}
+
+═══════════════════════════════════════════════════════
+Dibuat dengan ❤️ oleh Kelompok 5
+Battle of Brains Pro - Edisi Premium 2026
+            `.trim();
+
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(csvContent));
+            element.setAttribute('download', `Hasil_${currentPlayerName}_${new Date().getTime()}.txt`);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        // ==================== GAME QUESTIONS ====================
+        const questions = {
+            ipa: [
+                { q: "Apa itu fotosintesis?", a: ["Proses pembuatan makanan oleh tumbuhan", "Proses pernapasan tumbuhan", "Proses penyerapan air", "Proses pembelahan sel"], c: 0 },
+                { q: "Berapa jumlah kromosom manusia?", a: ["23", "46", "48", "44"], c: 1 },
+                { q: "Apa satuan SI untuk gaya?", a: ["Newton", "Joule", "Watt", "Pascal"], c: 0 },
+                { q: "Organ apa yang memompa darah?", a: ["Paru-paru", "Jantung", "Hati", "Ginjal"], c: 1 },
+                { q: "Berapa kecepatan cahaya?", a: ["3 x 10^8 m/s", "3 x 10^6 m/s", "3 x 10^10 m/s", "3 x 10^4 m/s"], c: 0 },
+                { q: "Apa itu DNA?", a: ["Asam deoksiribonukleat", "Asam amino", "Protein", "Lipid"], c: 0 },
+                { q: "Berapa pH air murni?", a: ["5", "6", "7", "8"], c: 2 },
+                { q: "Apa fungsi mitokondria?", a: ["Fotosintesis", "Produksi energi", "Penyimpanan gen", "Sintesis protein"], c: 1 },
+                { q: "Berapa jumlah tulang dewasa?", a: ["186", "206", "226", "246"], c: 1 },
+                { q: "Apa itu enzim?", a: ["Hormon", "Katalis biologi", "Antibodi", "Vitamin"], c: 1 },
+                { q: "Berapa periode rotasi bumi?", a: ["23 jam 56 menit", "24 jam", "25 jam", "22 jam"], c: 0 },
+                { q: "Apa warna bulan sebenarnya?", a: ["Putih", "Abu-abu", "Kuning", "Coklat"], c: 1 },
+                { q: "Berapa kalor jenis air?", a: ["4200 J/kg°C", "4000 J/kg°C", "4500 J/kg°C", "3800 J/kg°C"], c: 0 },
+                { q: "Apa itu osmosis?", a: ["Difusi air", "Difusi garam", "Pergerakan sel", "Pembelahan sel"], c: 0 },
+                { q: "Berapa jumlah planet di tata surya?", a: ["7", "8", "9", "10"], c: 1 },
+                { q: "Apa itu transpirasi?", a: ["Penguapan air dari tanah", "Penguapan air dari tumbuhan", "Penyerapan air", "Pergerakan air"], c: 1 },
+                { q: "Berapa titik didih air?", a: ["100°C", "99°C", "101°C", "98°C"], c: 0 },
+                { q: "Apa itu mutasi?", a: ["Perubahan gen", "Perubahan warna", "Perubahan ukuran", "Perubahan bentuk"], c: 0 },
+                { q: "Berapa jumlah gigi manusia dewasa?", a: ["28", "30", "32", "34"], c: 2 },
+                { q: "Apa itu homeostasis?", a: ["Keseimbangan lingkungan", "Keseimbangan internal tubuh", "Keseimbangan populasi", "Keseimbangan ekosistem"], c: 1 },
+                { q: "Berapa kecepatan suara di udara?", a: ["300 m/s", "330 m/s", "350 m/s", "370 m/s"], c: 1 },
+                { q: "Apa itu fototropisme?", a: ["Gerakan menuju cahaya", "Gerakan menuju air", "Gerakan menuju tanah", "Gerakan menuju udara"], c: 0 },
+                { q: "Berapa jumlah lapisan kulit?", a: ["2", "3", "4", "5"], c: 1 },
+                { q: "Apa itu plasmolisis?", a: ["Keluar masuknya air sel", "Masuknya air ke sel", "Keluarnya air dari sel", "Keseimbangan air sel"], c: 2 },
+                { q: "Berapa muatan elektron?", a: ["-1.6 x 10^-19 C", "-1.6 x 10^-18 C", "-1.6 x 10^-20 C", "-1.6 x 10^-17 C"], c: 0 },
+                { q: "Apa itu oksidasi?", a: ["Penambahan oksigen", "Pengurangan oksigen", "Penambahan elektron", "Pengurangan elektron"], c: 0 },
+                { q: "Berapa jarak bumi ke matahari?", a: ["150 juta km", "140 juta km", "160 juta km", "130 juta km"], c: 0 },
+                { q: "Apa itu respirasi aerob?", a: ["Pernapasan tanpa oksigen", "Pernapasan dengan oksigen", "Pernapasan tumbuhan", "Pernapasan bakteri"], c: 1 },
+                { q: "Berapa jumlah asam amino esensial?", a: ["8", "9", "10", "11"], c: 1 },
+                { q: "Apa itu denaturasi protein?", a: ["Perubahan struktur protein", "Pemecahan protein", "Penggabungan protein", "Penyimpanan protein"], c: 0 },
+                { q: "Berapa konstanta gravitasi?", a: ["6.67 x 10^-11", "6.67 x 10^-10", "6.67 x 10^-12", "6.67 x 10^-9"], c: 0 },
+                { q: "Apa itu ekosistem?", a: ["Komunitas makhluk hidup", "Makhluk hidup dan lingkungan", "Lingkungan saja", "Populasi saja"], c: 1 },
+                { q: "Berapa jumlah kromosom dalam gamet?", a: ["23", "46", "48", "92"], c: 0 },
+                { q: "Apa itu fotolisis?", a: ["Pemecahan cahaya", "Pemecahan air oleh cahaya", "Pemecahan gula", "Pemecahan protein"], c: 1 },
+                { q: "Berapa titik beku air?", a: ["0°C", "-1°C", "1°C", "-2°C"], c: 0 },
+                { q: "Apa itu gen?", a: ["Satuan pewarisan sifat", "Protein", "Enzim", "Hormon"], c: 0 },
+                { q: "Berapa jumlah vertebra lumbal?", a: ["4", "5", "6", "7"], c: 1 },
+                { q: "Apa itu fotoperiodisme?", a: ["Pengaruh cahaya pada tumbuhan", "Pengaruh suhu pada tumbuhan", "Pengaruh air pada tumbuhan", "Pengaruh angin pada tumbuhan"], c: 0 },
+                { q: "Berapa kalor laten peleburan es?", a: ["334000 J/kg", "340000 J/kg", "330000 J/kg", "338000 J/kg"], c: 0 },
+                { q: "Apa itu biodegradasi?", a: ["Penguraian bahan organik", "Penguraian bahan anorganik", "Pembentukan bahan organik", "Pembentukan bahan anorganik"], c: 0 }
+            ],
+            ips: [
+                { q: "Apa ibu kota Indonesia?", a: ["Surabaya", "Jakarta", "Bandung", "Medan"], c: 1 },
+                { q: "Berapa jumlah provinsi di Indonesia?", a: ["32", "33", "34", "35"], c: 2 },
+                { q: "Siapa presiden Indonesia pertama?", a: ["Soekarno", "Soeharto", "Habibie", "Wahid"], c: 0 },
+                { q: "Apa nama benua terbesar?", a: ["Afrika", "Asia", "Eropa", "Amerika"], c: 1 },
+                { q: "Berapa jumlah negara di ASEAN?", a: ["8", "9", "10", "11"], c: 2 },
+                { q: "Apa mata uang Indonesia?", a: ["Ringgit", "Rupiah", "Baht", "Dong"], c: 1 },
+                { q: "Siapa penemu mesin uap?", a: ["Thomas Edison", "James Watt", "Alexander Bell", "Nikola Tesla"], c: 1 },
+                { q: "Apa nama samudra terbesar?", a: ["Atlantik", "Hindia", "Pasifik", "Arktik"], c: 2 },
+                { q: "Berapa tahun Indonesia merdeka?", a: ["1944", "1945", "1946", "1947"], c: 1 },
+                { q: "Apa nama gunung tertinggi Indonesia?", a: ["Semeru", "Kerinci", "Puncak Jaya", "Merapi"], c: 2 },
+                { q: "Siapa penulis Bumi Manusia?", a: ["Pramoedya Ananta Toer", "Sutan Sjahrir", "Bung Karno", "Bung Hatta"], c: 0 },
+                { q: "Apa nama laut di antara Indonesia dan Filipina?", a: ["Laut Jawa", "Laut Sulawesi", "Laut Sulu", "Laut Banda"], c: 2 },
+                { q: "Berapa jumlah pulau di Indonesia?", a: ["17000", "17500", "18000", "18500"], c: 0 },
+                { q: "Apa nama sistem pemerintahan Indonesia?", a: ["Monarki", "Republik", "Kerajaan", "Federasi"], c: 1 },
+                { q: "Siapa pendiri Boedi Oetomo?", a: ["Soekarno", "Hatta", "Soetomo", "Kartini"], c: 2 },
+                { q: "Apa nama kota tertua di Indonesia?", a: ["Jakarta", "Surabaya", "Yogyakarta", "Bandung"], c: 0 },
+                { q: "Berapa panjang Sungai Kapuas?", a: ["1000 km", "1100 km", "1200 km", "1300 km"], c: 1 },
+                { q: "Apa nama pulau terbesar Indonesia?", a: ["Sumatera", "Kalimantan", "Sulawesi", "Papua"], c: 1 },
+                { q: "Siapa penulis Anak Semua Bangsa?", a: ["Pramoedya Ananta Toer", "Sutan Sjahrir", "Bung Karno", "Bung Hatta"], c: 0 },
+                { q: "Apa nama negara tetangga Indonesia di utara?", a: ["Malaysia", "Thailand", "Filipina", "Vietnam"], c: 2 },
+                { q: "Berapa luas Indonesia?", a: ["1.9 juta km²", "2 juta km²", "2.1 juta km²", "2.2 juta km²"], c: 0 },
+                { q: "Apa nama danau terbesar Indonesia?", a: ["Danau Toba", "Danau Singkarak", "Danau Maninjau", "Danau Kerinci"], c: 0 },
+                { q: "Siapa tokoh Gajah Mada?", a: ["Raja", "Panglima", "Menteri", "Prajurit"], c: 1 },
+                { q: "Apa nama kerajaan tertua di Indonesia?", a: ["Srivijaya", "Majapahit", "Mataram", "Tarumanegara"], c: 3 },
+                { q: "Berapa jumlah suku bangsa di Indonesia?", a: ["200", "300", "400", "500"], c: 1 },
+                { q: "Apa nama ibu kota Jawa Barat?", a: ["Bandung", "Bogor", "Sukabumi", "Cianjur"], c: 0 },
+                { q: "Siapa penulis Laskar Pelangi?", a: ["Andrea Hirata", "Pramoedya Ananta Toer", "Sutan Sjahrir", "Bung Karno"], c: 0 },
+                { q: "Apa nama benua yang paling kecil?", a: ["Afrika", "Eropa", "Australia", "Antartika"], c: 2 },
+                { q: "Berapa jumlah negara di Eropa?", a: ["40", "45", "50", "55"], c: 1 },
+                { q: "Apa nama negara dengan populasi terbesar?", a: ["India", "Indonesia", "China", "USA"], c: 2 },
+                { q: "Siapa presiden USA pertama?", a: ["Thomas Jefferson", "George Washington", "John Adams", "James Madison"], c: 1 },
+                { q: "Apa nama revolusi yang mengubah Prancis?", a: ["Revolusi Industri", "Revolusi Prancis", "Revolusi Rusia", "Revolusi Amerika"], c: 1 },
+                { q: "Berapa jumlah benua di dunia?", a: ["5", "6", "7", "8"], c: 2 },
+                { q: "Apa nama negara dengan luas terbesar?", a: ["Canada", "USA", "China", "Russia"], c: 3 },
+                { q: "Siapa penemu kompas?", a: ["China", "Arab", "Eropa", "India"], c: 0 },
+                { q: "Apa nama perang dunia pertama?", a: ["1914-1918", "1939-1945", "1900-1920", "1920-1945"], c: 0 },
+                { q: "Berapa jumlah bendera di PBB?", a: ["190", "193", "195", "200"], c: 1 },
+                { q: "Apa nama organisasi internasional tertua?", a: ["PBB", "NATO", "ASEAN", "EU"], c: 0 },
+                { q: "Siapa penulis Deklarasi Kemerdekaan USA?", a: ["George Washington", "Thomas Jefferson", "John Adams", "Benjamin Franklin"], c: 1 },
+                { q: "Apa nama ibukota Jepang?", a: ["Osaka", "Kyoto", "Tokyo", "Nagoya"], c: 2 }
+            ],
+            mtk: [
+                { q: "Berapa hasil 2 + 2?", a: ["3", "4", "5", "6"], c: 1 },
+                { q: "Berapa hasil 10 - 3?", a: ["6", "7", "8", "9"], c: 1 },
+                { q: "Berapa hasil 5 × 6?", a: ["25", "30", "35", "40"], c: 1 },
+                { q: "Berapa hasil 20 ÷ 4?", a: ["4", "5", "6", "7"], c: 1 },
+                { q: "Apa itu bilangan prima?", a: ["Bilangan genap", "Bilangan ganjil", "Bilangan hanya habis dibagi 1 dan dirinya", "Bilangan negatif"], c: 2 },
+                { q: "Berapa hasil 2³?", a: ["6", "8", "9", "12"], c: 1 },
+                { q: "Berapa hasil √16?", a: ["3", "4", "5", "6"], c: 1 },
+                { q: "Apa itu persamaan linear?", a: ["Persamaan kuadrat", "Persamaan pangkat 1", "Persamaan pangkat 3", "Persamaan logaritma"], c: 1 },
+                { q: "Berapa hasil sin(90°)?", a: ["0", "0.5", "1", "-1"], c: 2 },
+                { q: "Berapa hasil cos(0°)?", a: ["0", "0.5", "1", "-1"], c: 2 },
+                { q: "Apa itu trigonometri?", a: ["Ilmu segitiga", "Ilmu lingkaran", "Ilmu sudut", "Ilmu garis"], c: 0 },
+                { q: "Berapa hasil tan(45°)?", a: ["0", "0.5", "1", "2"], c: 2 },
+                { q: "Apa itu logaritma?", a: ["Kebalikan pangkat", "Kebalikan akar", "Kebalikan penjumlahan", "Kebalikan perkalian"], c: 0 },
+                { q: "Berapa hasil log₁₀(100)?", a: ["1", "2", "3", "4"], c: 1 },
+                { q: "Apa itu integral?", a: ["Penjumlahan", "Pengurangan", "Kebalikan turunan", "Perkalian"], c: 2 },
+                { q: "Berapa hasil ∫x dx?", a: ["x", "x²/2", "x²", "2x"], c: 1 },
+                { q: "Apa itu turunan?", a: ["Integral", "Limit", "Laju perubahan", "Jumlah"], c: 2 },
+                { q: "Berapa hasil d/dx(x²)?", a: ["x", "2x", "x²", "2"], c: 1 },
+                { q: "Apa itu matriks?", a: ["Persamaan", "Susunan bilangan", "Fungsi", "Limit"], c: 1 },
+                { q: "Berapa determinan [[1,2],[3,4]]?", a: ["-2", "-1", "0", "1"], c: 0 },
+                { q: "Apa itu vektor?", a: ["Bilangan", "Besaran dengan arah", "Besaran tanpa arah", "Persamaan"], c: 1 },
+                { q: "Berapa panjang vektor [3,4]?", a: ["5", "6", "7", "8"], c: 0 },
+                { q: "Apa itu kombinasi?", a: ["Permutasi", "Pemilihan tanpa urutan", "Pemilihan dengan urutan", "Penjumlahan"], c: 1 },
+                { q: "Berapa C(5,2)?", a: ["10", "15", "20", "25"], c: 0 },
+                { q: "Apa itu permutasi?", a: ["Kombinasi", "Pemilihan dengan urutan", "Pemilihan tanpa urutan", "Penjumlahan"], c: 1 },
+                { q: "Berapa P(5,2)?", a: ["10", "15", "20", "25"], c: 1 },
+                { q: "Apa itu probabilitas?", a: ["Kepastian", "Kemungkinan", "Jumlah", "Rata-rata"], c: 1 },
+                { q: "Berapa probabilitas dadu muncul 6?", a: ["1/6", "1/5", "1/4", "1/3"], c: 0 },
+                { q: "Apa itu statistik?", a: ["Ilmu angka", "Ilmu data", "Ilmu hitung", "Ilmu ukur"], c: 1 },
+                { q: "Apa itu mean?", a: ["Median", "Modus", "Rata-rata", "Standar deviasi"], c: 2 },
+                { q: "Apa itu median?", a: ["Rata-rata", "Nilai tengah", "Nilai paling sering", "Penyimpangan"], c: 1 },
+                { q: "Apa itu modus?", a: ["Rata-rata", "Nilai tengah", "Nilai paling sering", "Penyimpangan"], c: 2 },
+                { q: "Berapa hasil 0.5 + 0.3?", a: ["0.7", "0.8", "0.9", "1.0"], c: 0 },
+                { q: "Berapa hasil 1/2 + 1/3?", a: ["1/5", "2/5", "3/5", "5/6"], c: 3 },
+                { q: "Apa itu bilangan rasional?", a: ["Bilangan bulat", "Bilangan desimal", "Bilangan yang dapat dinyatakan p/q", "Bilangan negatif"], c: 2 },
+                { q: "Apa itu bilangan irasional?", a: ["Bilangan bulat", "Bilangan desimal", "Bilangan yang tidak dapat dinyatakan p/q", "Bilangan negatif"], c: 2 },
+                { q: "Berapa hasil √2?", a: ["1.4", "1.41", "1.414", "1.4142"], c: 3 },
+                { q: "Apa itu fungsi?", a: ["Persamaan", "Relasi khusus", "Integral", "Turunan"], c: 1 },
+                { q: "Apa itu domain?", a: ["Range", "Daerah asal", "Daerah hasil", "Grafik"], c: 1 },
+                { q: "Berapa hasil 15% dari 200?", a: ["20", "30", "40", "50"], c: 1 }
+            ],
+            bing: [
+                { q: "What is the English word for 'rumah'?", a: ["School", "House", "Car", "Book"], c: 1 },
+                { q: "Berapa dalam bahasa Inggris adalah 'lima'?", a: ["Three", "Four", "Five", "Six"], c: 2 },
+                { q: "Apa arti 'beautiful'?", a: ["Jelek", "Cantik", "Besar", "Kecil"], c: 1 },
+                { q: "Apa arti 'happy'?", a: ["Sedih", "Bahagia", "Marah", "Takut"], c: 1 },
+                { q: "Apa arti 'fast'?", a: ["Lambat", "Cepat", "Sedang", "Sangat lambat"], c: 1 },
+                { q: "Apa arti 'small'?", a: ["Besar", "Kecil", "Sedang", "Sangat besar"], c: 1 },
+                { q: "Apa arti 'cold'?", a: ["Panas", "Dingin", "Hangat", "Sejuk"], c: 1 },
+                { q: "Apa arti 'hot'?", a: ["Dingin", "Panas", "Sejuk", "Hangat"], c: 1 },
+                { q: "Apa arti 'good'?", a: ["Buruk", "Baik", "Jelek", "Sedang"], c: 1 },
+                { q: "Apa arti 'bad'?", a: ["Baik", "Buruk", "Sedang", "Bagus"], c: 1 },
+                { q: "Apa arti 'love'?", a: ["Benci", "Cinta", "Suka", "Tidak suka"], c: 1 },
+                { q: "Apa arti 'hate'?", a: ["Cinta", "Benci", "Suka", "Tidak suka"], c: 1 },
+                { q: "Apa arti 'friend'?", a: ["Musuh", "Teman", "Keluarga", "Tetangga"], c: 1 },
+                { q: "Apa arti 'family'?", a: ["Teman", "Keluarga", "Tetangga", "Sahabat"], c: 1 },
+                { q: "Apa arti 'school'?", a: ["Rumah", "Sekolah", "Kantor", "Toko"], c: 1 },
+                { q: "Apa arti 'teacher'?", a: ["Murid", "Guru", "Kepala sekolah", "Penjaga"], c: 1 },
+                { q: "Apa arti 'student'?", a: ["Guru", "Murid", "Kepala sekolah", "Penjaga"], c: 1 },
+                { q: "Apa arti 'book'?", a: ["Pensil", "Buku", "Kertas", "Pena"], c: 1 },
+                { q: "Apa arti 'pen'?", a: ["Pensil", "Pena", "Penghapus", "Penggaris"], c: 1 },
+                { q: "Apa arti 'pencil'?", a: ["Pena", "Pensil", "Penghapus", "Penggaris"], c: 1 },
+                { q: "Apa arti 'water'?", a: ["Api", "Air", "Udara", "Tanah"], c: 1 },
+                { q: "Apa arti 'fire'?", a: ["Air", "Api", "Udara", "Tanah"], c: 1 },
+                { q: "Apa arti 'earth'?", a: ["Langit", "Tanah", "Laut", "Udara"], c: 1 },
+                { q: "Apa arti 'sky'?", a: ["Tanah", "Langit", "Laut", "Udara"], c: 1 },
+                { q: "Apa arti 'sea'?", a: ["Sungai", "Laut", "Danau", "Kolam"], c: 1 },
+                { q: "Apa arti 'river'?", a: ["Laut", "Sungai", "Danau", "Kolam"], c: 1 },
+                { q: "Apa arti 'mountain'?", a: ["Lembah", "Gunung", "Bukit", "Dataran"], c: 1 },
+                { q: "Apa arti 'tree'?", a: ["Rumput", "Pohon", "Bunga", "Daun"], c: 1 },
+                { q: "Apa arti 'flower'?", a: ["Rumput", "Pohon", "Bunga", "Daun"], c: 2 },
+                { q: "Apa arti 'animal'?", a: ["Tumbuhan", "Hewan", "Manusia", "Benda"], c: 1 },
+                { q: "Apa arti 'bird'?", a: ["Ikan", "Burung", "Kucing", "Anjing"], c: 1 },
+                { q: "Apa arti 'fish'?", a: ["Burung", "Ikan", "Kucing", "Anjing"], c: 1 },
+                { q: "Apa arti 'cat'?", a: ["Anjing", "Kucing", "Burung", "Ikan"], c: 1 },
+                { q: "Apa arti 'dog'?", a: ["Kucing", "Anjing", "Burung", "Ikan"], c: 1 },
+                { q: "Apa arti 'eat'?", a: ["Minum", "Makan", "Tidur", "Bermain"], c: 1 },
+                { q: "Apa arti 'drink'?", a: ["Makan", "Minum", "Tidur", "Bermain"], c: 1 },
+                { q: "Apa arti 'sleep'?", a: ["Makan", "Minum", "Tidur", "Bermain"], c: 2 },
+                { q: "Apa arti 'play'?", a: ["Bekerja", "Belajar", "Bermain", "Istirahat"], c: 2 },
+                { q: "Apa arti 'work'?", a: ["Bekerja", "Belajar", "Bermain", "Istirahat"], c: 0 },
+                { q: "Apa arti 'learn'?", a: ["Mengajar", "Belajar", "Membaca", "Menulis"], c: 1 }
+            ],
+            pai: [
+                { q: "Berapa rukun Islam?", a: ["4", "5", "6", "7"], c: 1 },
+                { q: "Apa rukun Islam pertama?", a: ["Zakat", "Syahadat", "Sholat", "Puasa"], c: 1 },
+                { q: "Berapa rakaat sholat Dhuhur?", a: ["2", "3", "4", "5"], c: 2 },
+                { q: "Apa nama bulan puasa dalam Islam?", a: ["Syawal", "Ramadan", "Syaban", "Muharram"], c: 1 },
+                { q: "Berapa jumlah surah dalam Al-Quran?", a: ["110", "114", "120", "130"], c: 1 },
+                { q: "Apa nama hari raya setelah Ramadan?", a: ["Hari Raya Adha", "Hari Raya Idul Fitri", "Hari Raya Nyepi", "Hari Raya Imlek"], c: 1 },
+                { q: "Siapa nabi pertama dalam Islam?", a: ["Muhammad", "Ibrahim", "Adam", "Nuh"], c: 2 },
+                { q: "Berapa jumlah rukun iman?", a: ["4", "5", "6", "7"], c: 2 },
+                { q: "Apa rukun iman pertama?", a: ["Percaya pada Malaikat", "Percaya pada Allah", "Percaya pada Nabi", "Percaya pada Hari Akhir"], c: 1 },
+                { q: "Apa nama kitab suci Islam?", a: ["Taurat", "Injil", "Al-Quran", "Zabur"], c: 2 },
+                { q: "Berapa jumlah nabi dalam Islam?", a: ["25", "124", "1000", "Tidak terhitung"], c: 1 },
+                { q: "Apa nama malaikat pencatat amal?", a: ["Jibril", "Mikail", "Kiraman Katibin", "Israfil"], c: 2 },
+                { q: "Berapa jumlah sujud dalam sholat?", a: ["2", "4", "6", "8"], c: 2 },
+                { q: "Apa nama zakat yang dikeluarkan saat Idul Fitri?", a: ["Zakat Mal", "Zakat Fitrah", "Zakat Profesi", "Zakat Emas"], c: 1 },
+                { q: "Berapa nisab emas untuk zakat?", a: ["85 gram", "90 gram", "95 gram", "100 gram"], c: 0 },
+                { q: "Apa nama haji yang dilakukan bukan pada bulan Haji?", a: ["Haji Tamattu", "Haji Qiran", "Haji Ifrad", "Umroh"], c: 3 },
+                { q: "Berapa jumlah hari Arafah dalam haji?", a: ["1 hari", "2 hari", "3 hari", "4 hari"], c: 0 },
+                { q: "Apa nama doa setelah sholat?", a: ["Doa Iftitah", "Doa Tarawih", "Doa Qunut", "Doa Tasbih"], c: 2 },
+                { q: "Berapa jumlah surat dalam Juz Amma?", a: ["30", "36", "40", "50"], c: 1 },
+                { q: "Apa nama surah pertama dalam Al-Quran?", a: ["Al-Fatihah", "Al-Baqarah", "Ali Imran", "An-Nisa"], c: 0 },
+                { q: "Berapa jumlah ayat dalam surah Al-Fatihah?", a: ["5", "6", "7", "8"], c: 2 },
+                { q: "Apa nama surah terakhir dalam Al-Quran?", a: ["An-Nas", "Al-Falaq", "Al-Ikhlas", "Al-Lahab"], c: 0 },
+                { q: "Berapa jumlah ayat dalam Al-Quran?", a: ["6000", "6200", "6236", "6500"], c: 2 },
+                { q: "Apa nama bacaan Quran yang indah?", a: ["Tajweed", "Tartil", "Tafsir", "Tahlil"], c: 0 },
+                { q: "Berapa jumlah huruf hijaiyah?", a: ["26", "28", "29", "30"], c: 2 },
+                { q: "Apa nama huruf yang tidak memiliki titik?", a: ["Alif", "Ba", "Ta", "Tha"], c: 0 },
+                { q: "Apa nama ilmu yang mempelajari bacaan Quran?", a: ["Tafsir", "Hadist", "Tajweed", "Fiqih"], c: 2 },
+                { q: "Berapa jumlah sujud tilawah dalam Al-Quran?", a: ["14", "15", "16", "17"], c: 1 },
+                { q: "Apa nama hukum membaca Quran dengan indah?", a: ["Wajib", "Sunah", "Mubah", "Makruh"], c: 1 },
+                { q: "Apa nama tempat sholat?", a: ["Gereja", "Masjid", "Vihara", "Pura"], c: 1 },
+                { q: "Berapa jumlah tiang dalam Kaabah?", a: ["2", "3", "4", "5"], c: 2 },
+                { q: "Apa nama batu dalam Kaabah?", a: ["Batu Putih", "Batu Hitam", "Batu Merah", "Batu Kuning"], c: 1 },
+                { q: "Berapa jumlah pintu Surga?", a: ["6", "7", "8", "9"], c: 2 },
+                { q: "Berapa jumlah pintu Neraka?", a: ["6", "7", "8", "9"], c: 2 },
+                { q: "Apa nama hari kiamat dalam Islam?", a: ["Hari Akhir", "Hari Kiamat", "Hari Diadili", "Hari Perhitungan"], c: 1 },
+                { q: "Berapa jumlah malaikat penjaga Neraka?", a: ["18", "19", "20", "21"], c: 1 },
+                { q: "Apa nama malaikat penjaga Neraka?", a: ["Malik", "Jibril", "Mikail", "Israfil"], c: 0 },
+                { q: "Berapa jumlah malaikat utama dalam Islam?", a: ["3", "4", "5", "6"], c: 1 },
+                { q: "Siapa nabi terakhir dalam Islam?", a: ["Isa", "Musa", "Muhammad", "Ibrahim"], c: 2 },
+                { q: "Berapa jumlah rakaat sholat Maghrib?", a: ["2", "3", "4", "5"], c: 1 }
+            ]
+        };
+
+        // ==================== GAME STATE ====================
+        const gameState = {
+            subject: 'ipa',
+            level: 'easy',
+            mode: 'normal',
+            score: 0,
+            lives: 5,
+            currentQuestionIndex: 0,
+            correctAnswers: 0,
+            wrongAnswers: 0,
+            combo: 0,
+            maxStreak: 0,
+            questionsData: [],
+            answered: false,
+            timeLeft: 60,
+            timerInterval: null,
+            hintsUsed: 0,
+            fiftyFiftyUsed: false
+        };
+
+        const levelConfig = {
+            easy: { lives: 5, pointsCorrect: 10, pointsWrong: -2 },
+            medium: { lives: 4, pointsCorrect: 15, pointsWrong: -5 },
+            hard: { lives: 3, pointsCorrect: 20, pointsWrong: -8 },
+            extreme: { lives: 2, pointsCorrect: 25, pointsWrong: -10 }
+        };
+
+        // ==================== GAME DOM ELEMENTS ====================
+        const gameScreen = document.getElementById('gameScreen');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const startScreen = document.getElementById('startScreen');
+        const subjectSelect = document.getElementById('subjectSelect');
+        const modeSelect = document.getElementById('modeSelect');
+        const levelBtns = document.querySelectorAll('.level-btn');
+        const startBtn = document.getElementById('startBtn');
+        const scoreValue = document.getElementById('scoreValue');
+        const livesContainer = document.getElementById('livesContainer');
+        const questionCount = document.getElementById('questionCount');
+        const currentQuestionNumber = document.getElementById('currentQuestionNumber');
+        const questionText = document.getElementById('questionText');
+        const answersContainer = document.getElementById('answersContainer');
+        const nextBtn = document.getElementById('nextBtn');
+        const quitBtn = document.getElementById('quitBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const menuBtn = document.getElementById('menuBtn');
+        const exportBtn = document.getElementById('exportBtn');
+        const finalScore = document.getElementById('finalScore');
+        const resultMessage = document.getElementById('resultMessage');
+        const resultBadge = document.getElementById('resultBadge');
+        const correctCount = document.getElementById('correctCount');
+        const wrongCount = document.getElementById('wrongCount');
+        const accuracyPercent = document.getElementById('accuracyPercent');
+        const achievementContainer = document.getElementById('achievementContainer');
+        const comboDisplay = document.getElementById('comboDisplay');
+        const comboCount = document.getElementById('comboCount');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const timerValue = document.getElementById('timerValue');
+        const streakValue = document.getElementById('streakValue');
+        const progressFill = document.getElementById('progressFill');
+        const powerupsContainer = document.getElementById('powerupsContainer');
+        const changeNameBtn = document.getElementById('changeNameBtn');
+
+        // ==================== GAME EVENT LISTENERS ====================
+        levelBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                levelBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                gameState.level = btn.dataset.level;
+            });
+        });
+
+        startBtn.addEventListener('click', startGame);
+        nextBtn.addEventListener('click', nextQuestion);
+        quitBtn.addEventListener('click', quitGame);
+        restartBtn.addEventListener('click', restartGame);
+        menuBtn.addEventListener('click', backToMenu);
+        exportBtn.addEventListener('click', () => {
+            const finalScoreValue = Math.max(0, gameState.score);
+            const total = gameState.correctAnswers + gameState.wrongAnswers;
+            const accuracy = total > 0 ? Math.round((gameState.correctAnswers / total) * 100) : 0;
+            exportGameResults(gameState, finalScoreValue, accuracy);
+        });
+
+        changeNameBtn.addEventListener('click', () => {
+            gameContainer.style.display = 'none';
+            playerNameScreen.classList.remove('hidden');
+            playerNameInput.value = currentPlayerName;
+            playerNameInput.focus();
+        });
+
+        // ==================== GAME FUNCTIONS ====================
+        function startGame() {
+            gameState.subject = subjectSelect.value;
+            gameState.mode = modeSelect.value;
+            const config = levelConfig[gameState.level];
+            
+            gameState.currentQuestionIndex = 0;
+            gameState.score = 0;
+            gameState.lives = config.lives;
+            gameState.correctAnswers = 0;
+            gameState.wrongAnswers = 0;
+            gameState.combo = 0;
+            gameState.maxStreak = 0;
+            gameState.answered = false;
+            gameState.timeLeft = 60;
+            gameState.hintsUsed = 0;
+            gameState.fiftyFiftyUsed = false;
+            
+            // Get random 40 questions from selected subject
+            const allQuestions = [...questions[gameState.subject]];
+            gameState.questionsData = shuffleArray(allQuestions).slice(0, 40);
+            
+            // Shuffle answers for each question
+            gameState.questionsData = gameState.questionsData.map(q => {
+                const correctAnswer = q.a[q.c];
+                const shuffledAnswers = shuffleArray([...q.a]);
+                const newCorrectIndex = shuffledAnswers.indexOf(correctAnswer);
+                return {
+                    q: q.q,
+                    a: shuffledAnswers,
+                    c: newCorrectIndex
+                };
+            });
+            
+            // Switch to game screen
+            startScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            comboDisplay.classList.remove('hidden');
+            
+            if (gameState.mode === 'timed') {
+                timerDisplay.classList.remove('hidden');
+                startTimer();
+            }
+            
+            updateLives();
+            updateScore();
+            loadQuestion();
+        }
+
+        function startTimer() {
+            if (gameState.timerInterval) clearInterval(gameState.timerInterval);
+            gameState.timerInterval = setInterval(() => {
+                gameState.timeLeft--;
+                timerValue.textContent = gameState.timeLeft;
+                
+                if (gameState.timeLeft <= 0) {
+                    clearInterval(gameState.timerInterval);
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function loadQuestion() {
+            const question = gameState.questionsData[gameState.currentQuestionIndex];
+            gameState.answered = false;
+            
+            currentQuestionNumber.textContent = gameState.currentQuestionIndex + 1;
+            questionCount.textContent = `${gameState.currentQuestionIndex + 1}/40`;
+            
+            const progress = ((gameState.currentQuestionIndex + 1) / 40) * 100;
+            progressFill.style.width = progress + '%';
+            
+            questionText.textContent = question.q;
+            
+            answersContainer.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+            question.a.forEach((answer, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'answer-btn';
+                btn.dataset.number = letters[index];
+                btn.textContent = answer;
+                btn.addEventListener('click', () => selectAnswer(index));
+                answersContainer.appendChild(btn);
+            });
+            
+            updatePowerups();
+            nextBtn.classList.add('hidden');
+        }
+
+        function updatePowerups() {
+            powerupsContainer.innerHTML = '';
+            
+            const hintBtn = document.createElement('button');
+            hintBtn.className = 'powerup-btn';
+            hintBtn.textContent = '💡 Hint';
+            hintBtn.disabled = gameState.hintsUsed >= 2;
+            hintBtn.addEventListener('click', useHint);
+            powerupsContainer.appendChild(hintBtn);
+            
+            const fiftyBtn = document.createElement('button');
+            fiftyBtn.className = 'powerup-btn';
+            fiftyBtn.textContent = '50/50';
+            fiftyBtn.disabled = gameState.fiftyFiftyUsed;
+            fiftyBtn.addEventListener('click', useFiftyFifty);
+            powerupsContainer.appendChild(fiftyBtn);
+            
+            const skipBtn = document.createElement('button');
+            skipBtn.className = 'powerup-btn';
+            skipBtn.textContent = '⏭️ Skip';
+            skipBtn.addEventListener('click', skipQuestion);
+            powerupsContainer.appendChild(skipBtn);
+        }
+
+        function useHint() {
+            if (gameState.hintsUsed >= 2) return;
+            gameState.hintsUsed++;
+            const question = gameState.questionsData[gameState.currentQuestionIndex];
+            const correctBtn = document.querySelectorAll('.answer-btn')[question.c];
+            correctBtn.style.background = 'linear-gradient(135deg, #84fab0, #8fd3f4)';
+            correctBtn.style.opacity = '0.7';
+        }
+
+        function useFiftyFifty() {
+            if (gameState.fiftyFiftyUsed) return;
+            gameState.fiftyFiftyUsed = true;
+            const question = gameState.questionsData[gameState.currentQuestionIndex];
+            const btns = document.querySelectorAll('.answer-btn');
+            const wrongIndices = [];
+            btns.forEach((btn, idx) => {
+                if (idx !== question.c) wrongIndices.push(idx);
+            });
+            const toHide = wrongIndices.slice(0, 2);
+            toHide.forEach(idx => {
+                btns[idx].style.opacity = '0.3';
+                btns[idx].style.pointerEvents = 'none';
+            });
+        }
+
+        function skipQuestion() {
+            gameState.wrongAnswers++;
+            gameState.combo = 0;
+            comboDisplay.classList.add('hidden');
+            nextQuestion();
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (gameState.answered) return;
+            
+            gameState.answered = true;
+            const question = gameState.questionsData[gameState.currentQuestionIndex];
+            const config = levelConfig[gameState.level];
+            const answerBtns = answersContainer.querySelectorAll('.answer-btn');
+            
+            if (selectedIndex === question.c) {
+                answerBtns[selectedIndex].classList.add('correct');
+                gameState.combo++;
+                gameState.maxStreak = Math.max(gameState.maxStreak, gameState.combo);
+                gameState.score += config.pointsCorrect + (gameState.combo * 2);
+                gameState.correctAnswers++;
+                updateComboDisplay();
+            } else {
+                answerBtns[selectedIndex].classList.add('wrong');
+                answerBtns[question.c].classList.add('correct');
+                gameState.score += config.pointsWrong;
+                gameState.wrongAnswers++;
+                gameState.combo = 0;
+                comboDisplay.classList.add('hidden');
+                gameState.lives--;
+                
+                if (gameState.lives <= 0) {
+                    setTimeout(() => endGame(), 1500);
+                    return;
+                }
+            }
+            
+            updateScore();
+            updateLives();
+            streakValue.textContent = gameState.combo;
+            nextBtn.classList.remove('hidden');
+        }
+
+        function updateComboDisplay() {
+            if (gameState.combo > 0) {
+                comboCount.textContent = gameState.combo;
+                comboDisplay.classList.remove('hidden');
+            }
+        }
+
+        function nextQuestion() {
+            gameState.currentQuestionIndex++;
+            
+            if (gameState.currentQuestionIndex >= 40) {
+                endGame();
+            } else {
+                loadQuestion();
+            }
+        }
+
+        function updateScore() {
+            scoreValue.textContent = Math.max(0, gameState.score);
+        }
+
+        function updateLives() {
+            livesContainer.innerHTML = '';
+            const config = levelConfig[gameState.level];
+            
+            for (let i = 0; i < config.lives; i++) {
+                const heart = document.createElement('span');
+                heart.textContent = i < gameState.lives ? '❤️' : '🖤';
+                heart.style.fontSize = '24px';
+                livesContainer.appendChild(heart);
+            }
+        }
+
+        function endGame() {
+            if (gameState.timerInterval) clearInterval(gameState.timerInterval);
+            
+            gameScreen.classList.add('hidden');
+            gameOverScreen.classList.remove('hidden');
+            comboDisplay.classList.add('hidden');
+            timerDisplay.classList.add('hidden');
+            
+            const finalScoreValue = Math.max(0, gameState.score);
+            finalScore.textContent = finalScoreValue;
+            correctCount.textContent = gameState.correctAnswers;
+            wrongCount.textContent = gameState.wrongAnswers;
+            
+            const total = gameState.correctAnswers + gameState.wrongAnswers;
+            const accuracy = total > 0 ? Math.round((gameState.correctAnswers / total) * 100) : 0;
+            accuracyPercent.textContent = accuracy + '%';
+            
+            let message = '';
+            let badge = '';
+            
+            if (accuracy >= 90) {
+                message = '🎉 LUAR BIASA! KAMU JENIUS!';
+                badge = '<div class="result-badge excellent">⭐ EXCELLENT</div>';
+            } else if (accuracy >= 75) {
+                message = '👍 BAGUS SEKALI! KAMU HEBAT!';
+                badge = '<div class="result-badge good">💪 GOOD</div>';
+            } else if (accuracy >= 60) {
+                message = '😊 CUKUP BAIK! TERUS BERLATIH!';
+                badge = '<div class="result-badge fair">📚 FAIR</div>';
+            } else {
+                message = '💪 JANGAN MENYERAH! COBA LAGI!';
+                badge = '<div class="result-badge poor">🎯 KEEP TRYING</div>';
+            }
+            
+            resultMessage.textContent = message;
+            resultBadge.innerHTML = badge;
+
+            const unlockedAchievements = checkAchievements(gameState);
+            achievementContainer.innerHTML = '';
+            unlockedAchievements.forEach(achievement => {
+                const badgeElem = document.createElement('div');
+                badgeElem.className = 'achievement-badge';
+                badgeElem.textContent = achievement.name;
+                achievementContainer.appendChild(badgeElem);
+            });
+
+            saveGameStats(finalScoreValue, accuracy, gameState.subject, gameState.level);
+        }
+
+        function quitGame() {
+            if (confirm('Yakin ingin keluar dari permainan? Semua progress akan hilang.')) {
+                endGame();
+            }
+        }
+
+        function restartGame() {
+            gameOverScreen.classList.add('hidden');
+            startGame();
+        }
+
+        function backToMenu() {
+            gameOverScreen.classList.add('hidden');
+            gameContainer.style.display = 'none';
+            mainNav.style.display = 'flex';
+            homeScreen.style.display = 'flex';
+            updateStatsDisplay();
+            updateLeaderboardDisplay();
+        }
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function checkAchievements(gameState) {
+            const unlocked = [];
+            
+            if (gameState.score >= 250) {
+                unlocked.push({ name: '🌟 Perfect Score' });
+            }
+            if (gameState.correctAnswers === 40) {
+                unlocked.push({ name: '🎯 Accuracy Master' });
+            }
+            if (gameState.level === 'extreme') {
+                unlocked.push({ name: '🏆 Challenger' });
+            }
+            if (gameState.combo >= 10) {
+                unlocked.push({ name: '🔥 Combo Master' });
+            }
+            if (gameState.maxStreak >= 15) {
+                unlocked.push({ name: '⚡ Streak Legend' });
+            }
+            if (gameState.mode === 'survival' && gameState.correctAnswers >= 35) {
+                unlocked.push({ name: '💪 Survival Expert' });
+            }
+            if (gameState.mode === 'timed' && gameState.correctAnswers >= 30) {
+                unlocked.push({ name: '⏱️ Speed Master' });
+            }
+
+            return unlocked;
+        }
+
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            
+            if (currentPlayerName) {
+                document.getElementById('displayPlayerName').textContent = currentPlayerName;
+                document.getElementById('gamePlayerName').textContent = currentPlayerName;
+                document.getElementById('finalPlayerName').textContent = currentPlayerName;
+            }
+            
+            updateStatsDisplay();
+            updateLeaderboardDisplay();
+            
+            console.log("🔥 BATTLE OF BRAINS PRO siap dimainkan!");
+            console.log(`📚 Total soal: ${Object.values(questions).reduce((sum, arr) => sum + arr.length, 0)}`);
+        });
+    </script>
+</body>
+</html>
